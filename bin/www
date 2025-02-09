@@ -83,8 +83,21 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+
+  const os = require('os');
+  const networkInterfaces = os.networkInterfaces();
+
+  let localIP = '127.0.0.1'; // Default ke localhost
+  for (const iface of Object.values(networkInterfaces)) {
+    for (const net of iface) {
+      if (net.family === 'IPv4' && !net.internal) {
+        localIP = net.address;
+        break;
+      }
+    }
+  }
+
+  console.log(`🚀 Server berjalan di: http://${localIP}:${addr.port}`);
+  console.log(`🌍 Akses di localhost: http://localhost:${addr.port}`);
 }
