@@ -2,6 +2,8 @@
 
 Program ini adalah contoh backend menggunakan **Express.js** untuk mengunggah file ke **Firebase Storage**. File yang diunggah akan disimpan di Firebase Storage, dan program akan mengembalikan URL download untuk mengakses file tersebut.
 
+## 📊 Vercel status
+![Vercel Deploy](https://vercelbadge.vercel.app/api/KiroFyzu/firebase-json-storage)
 ## 🚀 Cara Menggunakan
 
 1. Clone repository ini:
