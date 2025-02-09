@@ -18,6 +18,7 @@ jobs:
         with:
           node-version: 20
       - run: npm install
+      - run: npm run build  # bwajingan
       - run: npm start
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
