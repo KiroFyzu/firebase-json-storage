@@ -27,7 +27,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 
-const upload = multer({ dest: 'uploads/' }); // Simpan file sementara di folder 'uploads'
+const upload = multer({ dest: '../../tmp/' }); // Simpan file sementara di folder 'uploads'
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
