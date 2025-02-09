@@ -1,0 +1,6 @@
+node_modules/
+*.log
+*.tmp
+package-lock.json
+UsersAdministratorAppDataRoamingnpm/
+UsersAdministratorAppDataRoamingnpm-cache/

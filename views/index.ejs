@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Storage Uploader - KiroFyzu</title>
+  <style>
+    :root {
+      --background-color: #ffffff;
+      --text-color: #000000;
+      --border-color: #cccccc;
+      --highlight-color: #333333;
+      --firebase-color: #F6820D;
+      --strong-color: #059BE5;
+      --code-bg: #f4f4f4;
+    }
+
+    body[data-theme='dark'] {
+      --background-color: #1a1a1a;
+      --text-color: #ffffff;
+      --border-color: #676464;
+      --highlight-color: #bbbbbb;
+      --firebase-color: #ffcb2b;
+    }
+
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: var(--background-color);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    h1 {
+      color: var(--firebase-color);
+    }
+
+    h2 {
+      color: var(--firebase-color);
+    }
+
+    code {
+        background: var(--code-bg, #f4f4f4);
+        color: var(--code-text, #333);
+        padding: 5px;
+        border-radius: 4px;
+        font-family: monospace;
+    }
+
+    pre {
+      background: var(--code-bg, #f4f4f4);
+      color: var(--code-text, #333);
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+  }
+     
+    a {
+      color: var(--firebase-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    strong {
+      color: var(--strong-color);
+    }
+
+    .dropzone {
+      border: 2px dashed var(--border-color);
+      padding: 20px;
+      text-align: center;
+      color: var(--text-color);
+      margin-top: 10px;
+    }
+
+    .preview {
+      margin-top: 20px;
+    }
+
+    .preview img, .preview video {
+      max-width: 100%;
+      max-height: 300px;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: lightgrey;
+      color: var(--highlight-color);
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 15px;
+      align-items: center;
+    }
+
+    button:hover {
+      background-color: var(--border-color);
+      color: var(--highlight-color);
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Firebase Storage Uploader</h1>
+    <p>
+      Program ini adalah contoh backend menggunakan <strong>Express.js</strong> untuk mengunggah file ke <strong>Firebase Storage</strong>.
+      File yang diunggah akan disimpan di Firebase Storage, dan program akan mengembalikan URL download untuk mengakses file tersebut.
+    </p>
+    <hr>
+
+    <label for="fileOption">Upload dari File</label>
+    <form id="uploadFromFile" action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" id="fileInput" name="file" required>
+      <div id="dropzone" class="dropzone">
+        Seret & lepaskan file di sini atau tekan Ctrl+V untuk menempelkan file
+      </div>
+      <button type="submit">Upload</button>
+      <div id="preview" class="preview"></div>
+    </form>
+    <hr>
+    <h2>Cara Menggunakan</h2>
+    <ol>
+      <li>Clone repository ini.</li>
+      <li>Install dependencies dengan menjalankan <code>npm install</code>.</li>
+      <li>Tambahkan konfigurasi Firebase kamu di file <code>firebaseConfig.js</code>.</li>
+      <li>Jalankan server dengan perintah <code>node server.js</code>.</li>
+      <li>Gunakan endpoint <code>/upload</code> untuk mengunggah file.</li>
+    </ol>
+    <hr>
+<h2>Konfigurasi Folder Penyimpanan</h2>
+    Direktori Upload: Direktori upload default diatur ke <strong>../../tmp/</strong> untuk hosting di Vercel. Jika Anda menghosting secara lokal atau di server dedicated, ubah ke <strong> ./tmp/</strong> dalam file app.js.
+    <hr>
+    <h2>Contoh Penggunaan</h2>
+    <h3>Mengunggah File Menggunakan cURL</h3>
+    <pre><code>curl -X POST -F "file=@path/to/your/file.jpg" <%= protocol %>://<%= host %>/upload</code></pre>
+
+    <h3>Mengunggah File Menggunakan Postman</h3>
+    <ol>
+      <li>Pilih method <code>POST</code>.</li>
+      <li>Masukkan URL <code><%= protocol %>://<%= host %>/upload</code>.</li>
+      <li>Pilih tab <code>Body</code> > <code>form-data</code>.</li>
+      <li>Tambahkan key <code>file</code> dan pilih file yang akan diunggah.</li>
+    </ol>
+    <hr>
+
+    <h2>Struktur Repository</h2>
+    <pre>
+firebase-json-storage/
+├── firebaseConfig.js       # Konfigurasi Firebase
+├── app.js                  # Server Endpoint
+├── tmp/                    # Folder penyimpanan sementara file
+├── package.json            # Dependencies dan scripts
+└── README.md               # Dokumentasi repository
+    </pre>
+    <hr>
+
+    <h2>Link Repository</h2>
+    <p>
+      <a href="https://github.com/kirofyzu/firebase-json-storage" target="_blank">Firebase Storage Uploader with Express.js</a>
+    </p>
+
+    <h2>Catatan</h2>
+    <p>
+      Pastikan aturan keamanan Firebase Storage diatur untuk mengizinkan upload file.
+      Repository ini menggunakan Firebase Client SDK, yang cocok untuk penggunaan sederhana.
+      Untuk operasi admin, disarankan menggunakan Firebase Admin SDK.
+    </p>
+    <br>
+    <p><b>Todo: Menyimpan URL yang sudah di upload</b></p>
+  </div>
+
+  <div class="theme-toggle">
+    <label for="themeToggle">Dark Mode</label>
+    <input type="checkbox" id="themeToggle">
+  </div>
+
+  <script>
+    function toggleUploadOption() {
+      const uploadFromFile = document.getElementById('uploadFromFile');
+      const uploadFromUrl = document.getElementById('uploadFromUrl');
+      const fileOption = document.getElementById('fileOption');
+      const urlOption = document.getElementById('urlOption');
+    }
+
+    function handleDrop(event) {
+      event.preventDefault();
+      const files = event.dataTransfer.files;
+      if (files.length) {
+        const input = document.getElementById('fileInput');
+        input.files = files;
+        displayPreview(files[0]);
+      }
+    }
+
+    function handlePaste(event) {
+      const items = event.clipboardData.items;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].kind === 'file') {
+          const file = items[i].getAsFile();
+          const input = document.getElementById('fileInput');
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          input.files = dataTransfer.files;
+          displayPreview(file);
+        }
+      }
+    }
+
+    function displayPreview(file) {
+      const previewContainer = document.getElementById('preview');
+      previewContainer.innerHTML = '';
+      const fileType = file.type;
+
+      if (fileType.startsWith('image/')) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        previewContainer.appendChild(img);
+      } else if (fileType.startsWith('video/')) {
+        const video = document.createElement('video');
+        video.src = URL.createObjectURL(file);
+        video.controls = true;
+        previewContainer.appendChild(video);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropzone = document.getElementById('dropzone');
+      dropzone.addEventListener('dragover', (event) => event.preventDefault());
+      dropzone.addEventListener('drop', handleDrop);
+      document.addEventListener('paste', handlePaste);
+
+      const fileInput = document.getElementById('fileInput');
+      fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          displayPreview(file);
+        }
+      });
+
+      const themeToggle = document.getElementById('themeToggle');
+      themeToggle.addEventListener('change', () => {
+        document.body.setAttribute('data-theme', themeToggle.checked ? 'dark' : 'light');
+      });
+    });
+  </script>
+</body>
+</html>
